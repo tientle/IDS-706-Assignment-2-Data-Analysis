@@ -8,6 +8,8 @@ https://business.yelp.com/data/resources/open-dataset/
 
 This assignment includes 1. an analysis between restaurant attributes and Yelp star ratings, 2. a performance between Pandas and Polars, and 3. experimentation with Rust's ownership system.
 
+Note: **_The Yelp Open Dataset is not included in this repository due to its file size. Download the yelp_academic_dataset_business.json file here: https://business.yelp.com/data/resources/open-dataset/_**
+
 ## Analysis between restaurant attributes and Yelp star ratings
 
 ### Project Question/Goal
@@ -111,5 +113,13 @@ I modified a Rust Jupyter notebook to demonstrate Rust's ownership system. I cre
 4. Install dependencies
    pip install -r requirements.txt
 
-5. Run analysis
-   python yelp_data.py
+5. Download the Yelp Open Dataset
+
+**_The Yelp Open Dataset is not included in this repository due to its file size._**
+
+https://business.yelp.com/data/resources/open-dataset/
+
+Download the Yelp Open Dataset and place the yelp_academic_dataset_business.json inside the data folder.
+
+6. Run the analysis
+   Run yelp_data.py
