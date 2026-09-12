@@ -65,7 +65,7 @@ One-hot encoding creates multiple model features from a single restaurant attrib
 
 ![Feature Importance](images/encoding.png)
 
-![Grouped Feature Importance](images/grouped_encoding.png)
+![Grouped Feature Importance, and Summed](images/encoding_grouped_sum.png)
 
 The highest-ranked attributes:
 
@@ -82,7 +82,7 @@ The highest-ranked attributes:
 
 Using the top 10 combined feature importance scores, I calculated the mean star rating and restaurant count for each attribute.
 
-![Grouped Feature Importance, and Summed](images/encoding_grouped_sum.png)
+![Grouped Feature Importance](images/grouped_encoding.png)
 
 ### Interpretation
 
