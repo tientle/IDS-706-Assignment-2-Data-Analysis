@@ -1,2 +1,3 @@
 data.ipynb
-data/
+data/*
+!data/.gitkeep

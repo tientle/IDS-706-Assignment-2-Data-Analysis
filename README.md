@@ -113,13 +113,13 @@ I modified a Rust Jupyter notebook to demonstrate Rust's ownership system. I cre
 4. Install dependencies
    `pip install -r requirements.txt`
 
-5. Download the Yelp Open Dataset
+5. Download the Yelp Open Dataset and place it in the provided data directory
 
 **_The Yelp Open Dataset is not included in this repository due to its file size._**
 
 https://business.yelp.com/data/resources/open-dataset/
 
-Download the Yelp Open Dataset and place the yelp_academic_dataset_business.json inside the data folder.
+Download the Yelp Open Dataset, unpack the .tar file, and place the yelp_academic_dataset_business.json inside the data folder.
 
 6. Run the analysis
    <br>
