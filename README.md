@@ -100,6 +100,10 @@ Polars grouping and summary statistics time: 0.016181 seconds
 
 I modified a Rust Jupyter notebook to demonstrate Rust's ownership system. I created a vector of colors. I assigned the vector to another variable to transfer ownership. After this, the original vector can no longer be used.
 
+![Rust Ownership Error](images/rust_error.png)
+
+![Rust Ownership Success](images/rust.png)
+
 ## Reproducing Analysis
 
 1. Clone repository
