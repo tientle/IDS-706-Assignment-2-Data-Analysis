@@ -105,13 +105,13 @@ I modified a Rust Jupyter notebook to demonstrate Rust's ownership system. I cre
 1. Clone repository
 
 2. Create a virtual environment
-   python3 -m venv .venv
+   `python3 -m venv .venv`
 
 3. Activate the environment
-   source .venv/bin/activate
+   ` source .venv/bin/activate`
 
 4. Install dependencies
-   pip install -r requirements.txt
+   `pip install -r requirements.txt`
 
 5. Download the Yelp Open Dataset
 
@@ -122,4 +122,5 @@ https://business.yelp.com/data/resources/open-dataset/
 Download the Yelp Open Dataset and place the yelp_academic_dataset_business.json inside the data folder.
 
 6. Run the analysis
+   <br>
    Run yelp_data.py
