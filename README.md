@@ -131,7 +131,7 @@ I modified a Rust Jupyter notebook to demonstrate Rust's ownership system. I cre
 
 https://business.yelp.com/data/resources/open-dataset/
 
-Download the Yelp Open Dataset, unpack the .tar file, and place the yelp_academic_dataset_business.json inside the data folder.
+Download the Yelp Open Dataset, unpack the .tar file, and place yelp_academic_dataset_business.json inside the data folder.
 
 6. Run the analysis
    <br>
