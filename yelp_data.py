@@ -30,7 +30,7 @@ data = pd.read_json('./data/yelp_academic_dataset_business.json', lines=True)
 # 2. Inspect the data
 # ==============================================================================
 
-print(data.shape) # Print shape: We get 150,346 rows and 14 columns.
+print(data.shape) # Print shape: We get 150,346 rows and 14 columns
 print(data.columns.tolist()) # View column names as list
 
 # Explore the the categories column. From this, we can see that this dataset includes business categories that span from nail salons to restaurants. 
@@ -52,7 +52,7 @@ data = data[restaurant_mask & review_count_mask] # Data that is only restaurants
 
 print(data.head()) # Inspect the subset of data. 
 
-print(data.shape) # The shape has now been reduced to (1263, 14).
+print(data.shape) # The shape has now been reduced to (1263, 14)
 
 # Exploring which state is most prevalent with restaurants with more than 500 reviews
 print(data["state"].value_counts()) 
@@ -137,12 +137,12 @@ x = restaurants_analysis[simple_attributes_list]
 y = restaurants_analysis["stars"]
 
 categorical_columns = x.select_dtypes(include=["object", "str", "bool"]).columns 
-# Filter for categorical columns. RestaurantsPriceRange2 has oridinal values.
+# Filter for categorical columns. RestaurantsPriceRange2 has oridinal values
 categorical_columns = [col for col in categorical_columns if col != "RestaurantsPriceRange2"]
 # Turns "1" "2" into actual 1, 2 instead of strings 
 x["RestaurantsPriceRange2"] = pd.to_numeric(x["RestaurantsPriceRange2"], errors="coerce")
 
-# Use One-Hot Encoding to encode restaurant attributes into numeric columns. 
+# Use One-Hot Encoding to encode restaurant attributes into numeric columns
 preprocessor = ColumnTransformer(
     transformers=[
         ( "categorical", OneHotEncoder(handle_unknown="ignore"), categorical_columns)
@@ -153,7 +153,6 @@ preprocessor = ColumnTransformer(
 # Apply preprocessing steps to predictor variable: restaurant attributes
 x_encoded = preprocessor.fit_transform(x)
 x_encoded.shape # Check shape of encoded dataset
-
 
 # Split the data into training and testing sets, 80% and 20% respectively. 
 # Random state set for reproducibility 
@@ -178,7 +177,6 @@ print("Predicted:", rating_prediction[:5])
 
 mae = mean_absolute_error(y_test, rating_prediction)
 print("Mean Absolute Error:", mae)
-
 
 # Get the names and feature importance scores of the model features
 feature_names = preprocessor.get_feature_names_out()

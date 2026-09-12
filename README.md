@@ -8,7 +8,7 @@ https://business.yelp.com/data/resources/open-dataset/
 
 This assignment includes 1. an analysis between restaurant attributes and Yelp star ratings, 2. a performance between Pandas and Polars, and 3. experimentation with Rust's ownership system.
 
-Note: **_The Yelp Open Dataset is not included in this repository due to its file size. Download the yelp_academic_dataset_business.json file here: https://business.yelp.com/data/resources/open-dataset/_**
+**_Note: The Yelp Open Dataset is not included in this repository due to its file size. Download the yelp_academic_dataset_business.json file here: https://business.yelp.com/data/resources/open-dataset/_**
 
 ## Analysis between restaurant attributes and Yelp star ratings
 
@@ -16,7 +16,7 @@ Note: **_The Yelp Open Dataset is not included in this repository due to its fil
 
 What restaurant characteristiscs are associated with higher Yelp star ratings?
 
-I analyzed restaurant attributes such as outdoor seating, delivery, alcohol offerings, bik parking and other characteristics to explore their relationships with a restaurant's Yelp star rating.
+I analyzed restaurant attributes such as outdoor seating, delivery, alcohol offerings, bike parking and other characteristics to explore their relationships with a restaurant's Yelp star rating.
 
 I trained a Random Forest regression model to deterimine specifically which attributes were most useful in predicting restaurant ratings.
 
@@ -90,10 +90,10 @@ Feature importance represents how useful a variable is for prediction, but does 
 
 I compared performance between Pandas and Polars by 1. filtering data and 2. grouping data and calculating summary statistics. The differences in each were small, but performance depends on many factors such as dataset size and system environments.
 
-Pandas filtering time: 0.020480 seconds
+Pandas filtering time: 0.020480 seconds <br>
 Polars filtering time: 0.019030 seconds
 
-Pandas grouping and summary statistics time: 0.016093 seconds
+Pandas grouping and summary statistics time: 0.016093 seconds <br>
 Polars grouping and summary statistics time: 0.016181 seconds
 
 ## Experimentation with Rust's ownership system
