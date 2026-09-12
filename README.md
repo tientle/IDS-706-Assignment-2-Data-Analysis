@@ -61,13 +61,11 @@ The model received a Mean Absolute Error (MAE) of 0.322 stars, meaning that the 
 
 To identify the restaurant characteristics most useful for predicting Yelp ratings, I used Random Forest feature importance.
 
-One-hot encoding creates multiple model features from a single restaurant attribute, so I grouped the importance scores of the encoded features back into their original attribute.
+One-hot encoding creates multiple model features from a single restaurant attribute, so I grouped the importance scores of the encoded features back into their original attribute and summed their feature importance scores.
 
 ![Feature Importance](images/encoding.png)
 
 ![Grouped Feature Importance](images/grouped_encoding.png)
-
-![Grouped Feature Importance, and Summed](images/encoding_grouped_sum.png)
 
 The highest-ranked attributes:
 
@@ -81,6 +79,10 @@ The highest-ranked attributes:
 8. Smoking
 9. Wheelchair Accessibility
 10. Restaurant Table Service
+
+Using the top 10 combined feature importance scores, I calculated the mean star rating and restaurant count for each attribute.
+
+![Grouped Feature Importance, and Summed](images/encoding_grouped_sum.png)
 
 ### Interpretation
 
