@@ -114,6 +114,30 @@ I modified a Rust Jupyter notebook to demonstrate Rust's ownership system. I cre
 
 ![Rust Ownership Success](images/rust.png)
 
+## Testing and Continuous Integration
+
+This project uses `pytest` to test the core data processing and machine
+learning workflow. The test suite includes unit tests for:
+
+- data filtering
+- cleaning
+- preprocessing
+- feature importance
+
+It also includes an end-to-end integration test that validates the workflow from raw Yelp-like data through
+model training, prediction, and evaluation.
+
+Tests can be run locally with:
+
+```bash
+python -m pytest testing/test_yelp_data.py -v
+
+### Test Results
+
+All seven unit and integration tests pass successfully:
+
+![Pytest results showing 7 passing tests](images/passed-tests.png)
+
 ## Reproducing Analysis
 
 1. Clone repository
@@ -138,3 +162,5 @@ Download the Yelp Open Dataset, unpack the .tar file, and place yelp_academic_da
 6. Run the analysis
    <br>
    Run yelp_data.py
+
+```
