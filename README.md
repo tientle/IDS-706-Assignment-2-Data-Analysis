@@ -2,6 +2,8 @@
 
 ## Overview
 
+[![Python tests](https://github.com/tientle/IDS-706-Assignment-2-Data-Analysis/actions/workflows/test.yml/badge.svg)](https://github.com/tientle/IDS-706-Assignment-2-Data-Analysis/actions/workflows/test.yml)
+
 This project explores data analysis, data engineering, and machine learning concepts using the Yelp Open Dataset.
 
 https://business.yelp.com/data/resources/open-dataset/
