@@ -41,17 +41,21 @@ print(data["categories"].value_counts())
 # ==============================================================================
 # 3. Basic Filtering and Grouping
 # ==============================================================================
+# Function to filter categories and minimum reviews
+def filter_businesses(data, category, min_reviews=500):
+    category_mask = data["categories"].str.contains(
+        category,
+        na=False
+    )
 
-# For this assignment, I will focus on a subset of data that is just the restaurants.
+    review_count_mask = data["review_count"] >= min_reviews
 
-restaurant_mask = data["categories"].str.contains("Restaurants", na=False) # Make a filter for categories containing 'Restaurant'
+    return data[category_mask & review_count_mask]
 
-review_count_mask = data["review_count"] >= 500 # Make a filter businesses with 500 or more reviews
-
-data = data[restaurant_mask & review_count_mask] # Data that is only restaurants with 500 or more reviews
+# Filter data to restaurants with at least 500 reviews
+data = filter_businesses(data, "Restaurants")
 
 print(data.head()) # Inspect the subset of data. 
-
 print(data.shape) # The shape has now been reduced to (1263, 14)
 
 # Exploring which state is most prevalent with restaurants with more than 500 reviews
@@ -63,30 +67,42 @@ data["attributes"].iloc[0] # Explore what is in the attributes field to explore 
 
 attributes = data["attributes"].apply(pd.Series) # Unpack attributes into a more readable format and explore
 attributes.head()
-
 attributes.columns.tolist() # Turn attributes into list
-
-# After inspecting attributes, I noticed there are some cleaning/formatting issues with values like u'none', and NaN 
-clean_attributes = attributes.copy() # Create a copy of attributes to clean
-clean_attributes = clean_attributes.replace(["None", "None'", "u'None"], np.nan) # Replace None with NaN
 
 def clean_strings(value):
     if isinstance(value, str):
         value = value.strip()
 
-        if value.startswith("u'") and value.endswith("'"): # For strings like u'average', only keep average
+        if value.startswith("u'") and value.endswith("'"):
             value = value[2:-1]
-        elif value.startswith("'") and value.endswith("'"): # Remove ' ' quotes around string
+        elif value.startswith("'") and value.endswith("'"):
             value = value[1:-1]
+
     return value
 
-clean_attributes = clean_attributes.map(clean_strings)
 
-# Fix True/False values from string to boolean
-clean_attributes = clean_attributes.replace({
-    "True": True,
-    "False": False
-})
+def clean_business_attributes(attributes):
+    clean_attributes = attributes.copy()
+
+    # Replace variations of None with NaN
+    clean_attributes = clean_attributes.replace(
+        ["None", "None'", "u'None"],
+        np.nan
+    )
+
+    # Clean formatting from strings
+    clean_attributes = clean_attributes.map(clean_strings)
+
+    # Convert True/False strings to booleans
+    clean_attributes = clean_attributes.replace({
+        "True": True,
+        "False": False
+    })
+
+    return clean_attributes
+
+# Call function 
+clean_attributes = clean_business_attributes(attributes)
 
 # Do a quick inspection of columns
 print(clean_attributes["WiFi"].value_counts(dropna=False))
@@ -105,6 +121,9 @@ for column in high_coverage:
     print(f"\n{column}")
     print(clean_attributes[column].value_counts(dropna=False))
 
+def remove_nested_attributes(attributes, nested_attributes):
+    return attributes.drop(columns=nested_attributes, errors="ignore")
+
 # For the purposes of this assignment, we can drop the fields with nested values
 nested_attributes = [
     "BusinessParking",
@@ -115,8 +134,7 @@ nested_attributes = [
     "DietaryRestrictions"
 ]
 
-# Remove the nested attributes
-simple_attributes = clean_attributes.drop(columns=nested_attributes)
+simple_attributes = remove_nested_attributes(clean_attributes, nested_attributes)
 
 # Join the original data with the simplified attributes data for analysis
 restaurants_analysis = data[["stars", "review_count"]].join(simple_attributes)
@@ -136,22 +154,39 @@ for attribute in simple_attributes_list:
 x = restaurants_analysis[simple_attributes_list]
 y = restaurants_analysis["stars"]
 
-categorical_columns = x.select_dtypes(include=["object", "str", "bool"]).columns 
-# Filter for categorical columns. RestaurantsPriceRange2 has oridinal values
-categorical_columns = [col for col in categorical_columns if col != "RestaurantsPriceRange2"]
-# Turns "1" "2" into actual 1, 2 instead of strings 
-x["RestaurantsPriceRange2"] = pd.to_numeric(x["RestaurantsPriceRange2"], errors="coerce")
+def preprocess_features(x):
+    x = x.copy()
 
-# Use One-Hot Encoding to encode restaurant attributes into numeric columns
-preprocessor = ColumnTransformer(
-    transformers=[
-        ( "categorical", OneHotEncoder(handle_unknown="ignore"), categorical_columns)
-    ],
-    remainder="passthrough" # Non-categorical columns (price range) are passed through unchanged
-)
+    categorical_columns = x.select_dtypes(
+        include=["object", "str", "bool"]
+    ).columns
 
-# Apply preprocessing steps to predictor variable: restaurant attributes
-x_encoded = preprocessor.fit_transform(x)
+    categorical_columns = [
+        col for col in categorical_columns
+        if col != "RestaurantsPriceRange2"
+    ]
+
+    x["RestaurantsPriceRange2"] = pd.to_numeric(
+        x["RestaurantsPriceRange2"],
+        errors="coerce"
+    )
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            (
+                "categorical",
+                OneHotEncoder(handle_unknown="ignore"),
+                categorical_columns
+            )
+        ],
+        remainder="passthrough"
+    )
+
+    x_encoded = preprocessor.fit_transform(x)
+
+    return x_encoded, preprocessor
+
+x_encoded, preprocessor = preprocess_features(x)
 x_encoded.shape # Check shape of encoded dataset
 
 # Split the data into training and testing sets, 80% and 20% respectively. 
