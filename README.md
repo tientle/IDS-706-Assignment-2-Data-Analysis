@@ -32,8 +32,8 @@ I trained a Random Forest regression model to explore which restaurant attribute
 
 The analysis uses business data from Yelp Open Dataset. The data contains many types of business, including beauty salons and dentists, so I filtered the data to:
 
-- Businesses categorized as 'Restaurant'
-- Restaurants with at least 500 reviews
+- Businesses with `"Restaurants"` in their Yelp categories
+- Businesses with at least 500 reviews
 
 This led me to have 1,263 restaurants to work with.
 
@@ -45,9 +45,9 @@ To clean and prepare the data, I:
 
 1. Expanded attributes into individual columns
 2. Cleaned inconsistent string representations
-3. Calculated the percentage of each attribute to see which ones had the highest amount of data
-4. Removed attributes that did not have a high percentage
-5. Focused on simple attributes rather than nested dictionary attributes
+3. Calculated the coverage of each attribute to understand how much data was available for each characteristic
+4. Examined attributes with at least 75% coverage
+5. Focused the analysis on simple attributes rather than nested dictionary attributes
 6. Converted 'RestaurantsPriceRange2' to a numeric variable
 
 Missing values were kept where appropriate because the absence of a characteristic in Yelp's data doesn't necessarily mean that the restaurant doesn't have that characteristic.

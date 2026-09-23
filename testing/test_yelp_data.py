@@ -11,7 +11,8 @@ from yelp_data import (
 )
 
 # ==============================================================================
-# Test 1
+# Test 1: Business Filtering
+# Tests normal filtering behavior and handling of a missing category value
 # ==============================================================================
 
 def test_filter_businesses():
@@ -20,13 +21,13 @@ def test_filter_businesses():
             "Restaurants, Italian",
             "Nail Salons, Beauty",
             "Restaurants, Mexican",
-            None
+            None # Edge case: business has no category value
         ],
         "review_count": [
-            600,
-            900,
-            200,
-            700
+            600, # Meets both conditions
+            900, # Has enough reviews, but not a restaurant
+            200, # Restaurant, but not enough reviews
+            700 # Enough reviews, but no category
         ]
     })
 
@@ -36,21 +37,26 @@ def test_filter_businesses():
         min_reviews=500
     )
 
+# Only business that meets both requirements (Restaurant, minimum 500 reviews) should remain
     assert len(result) == 1
     assert result.iloc[0]["categories"] == "Restaurants, Italian"
 
 # ==============================================================================
-# Test 2
+# Test 2: String Cleaning
+# Tests expected string cleaning behavior and non-string edge case
 # ==============================================================================
 
 def test_clean_strings():
     assert clean_strings("u'free'") == "free"
     assert clean_strings("'average'") == "average"
     assert clean_strings("  quiet  ") == "quiet"
+
+    # Edge case: non-string values should remain unchanged
     assert clean_strings(True) is True
 
 # ==============================================================================
-# Test 3
+# Test 3: Business Attribute Cleaning
+# Tests cleaning operations used on Yelp Attribute data
 # ==============================================================================
 
 def test_clean_business_attributes():
@@ -59,16 +65,22 @@ def test_clean_business_attributes():
         "OutdoorSeating": ["True", "False"]
     })
 
+    
     result = clean_business_attributes(test_attributes)
 
+    # Unicode string should be cleaned
     assert result.iloc[0]["WiFi"] == "free"
+    # Missing values should be converted to actual missing value
     assert pd.isna(result.iloc[1]["WiFi"])
+
+    # Strings converted to actual booleans
     assert result.iloc[0]["OutdoorSeating"] == True
     assert result.iloc[1]["OutdoorSeating"] == False
 
 # ==============================================================================
-# Test 4
-# ==============================================================================    
+# Test 4: Nested Attribute Removal
+# Tests normal column removal and behavior when a requested column is missing
+# ==============================================================================  
 
 def test_remove_nested_attributes():
     test_attributes = pd.DataFrame({
@@ -83,7 +95,7 @@ def test_remove_nested_attributes():
         "BusinessParking"
     ]
 
-    # Test normal behavior
+    # Expected behavior: nested attributes should be removed
     result = remove_nested_attributes(
         test_attributes,
         nested_attributes
@@ -103,8 +115,9 @@ def test_remove_nested_attributes():
     assert "Ambience" not in edge_result.columns
 
 # ==============================================================================
-# Test 5
-# ==============================================================================   
+# Test 5: Feature Preprocessing
+# Tests one-hot encoding, numeric feature handling, and preservation of rows
+# ==============================================================================  
 
 def test_preprocess_features():
     test_features = pd.DataFrame({
@@ -115,12 +128,13 @@ def test_preprocess_features():
 
     x_encoded, preprocessor = preprocess_features(test_features)
 
-    # Number of rows should stay the same
+     # Preprocessing should transform features without removing observations
     assert x_encoded.shape[0] == len(test_features)
 
-    # Categorical columns should be one-hot encoded
+    
     feature_names = preprocessor.get_feature_names_out()
 
+    # Categorical columns should be one-hot encoded
     assert any("WiFi" in name for name in feature_names)
     assert any("OutdoorSeating" in name for name in feature_names)
 
@@ -133,8 +147,9 @@ def test_preprocess_features():
     assert len(price_features) == 1
 
 # ==============================================================================
-# Test 6
-# ============================================================================== 
+# Test 6: Feature Importance
+# Tests mapping encoded features back to their original Yelp attributes and aggregation of multiple encoded importance scores
+# ==============================================================================
 
 def test_feature_importance():
     attributes = [
@@ -155,7 +170,8 @@ def test_feature_importance():
     ) == "OutdoorSeating"
 
     # Test combining importance scores
-feature_importance = pd.DataFrame({
+    
+    feature_importance = pd.DataFrame({
         "attribute": [
             "WiFi",
             "WiFi",
@@ -168,13 +184,16 @@ feature_importance = pd.DataFrame({
         ]
     })
 
-result = aggregate_feature_importance(feature_importance)
+    result = aggregate_feature_importance(feature_importance)
 
-assert result["WiFi"] == pytest.approx(0.15)
-assert result["OutdoorSeating"] == pytest.approx(0.20)
+    # Encoded importance scores belonging to the same original attribute should be combined correctly
+    assert result["WiFi"] == pytest.approx(0.15)
+    assert result["OutdoorSeating"] == pytest.approx(0.20)
 
 # ==============================================================================
 # System / Integration Test
+# Tests that the major parts of the analysis work together as one workflow
+# Filtering -> cleaning -> preprocessing -> model training -> prediction -> evaluation
 # ==============================================================================
 
 from sklearn.ensemble import RandomForestRegressor
@@ -277,9 +296,11 @@ def test_end_to_end_workflow():
 
     # Evaluate model
     mae = mean_absolute_error(y_test, predictions)
-
-    # Validate the end-to-end workflow
+    # Filtering should retain all eight valid restaurant observations
     assert len(filtered_data) == 8
+    # The model should produce exactly one prediction per test observation
     assert len(predictions) == len(y_test)
+    # Predictions should contain valid finite numeric values
     assert np.isfinite(predictions).all()
+    # MAE should be a valid non-negative error measurement
     assert mae >= 0
