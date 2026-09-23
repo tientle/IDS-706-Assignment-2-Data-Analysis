@@ -184,6 +184,4 @@ All seven tests currently pass successfully:
 
 GitHub Actions automatically runs the test suite whenever changes are pushed to the repository or submitted through a pull request. The workflow can also be run manually from the **Actions** tab on GitHub.
 
-```
-
-```
+![Successful GitHub Actions workflow](images/github-actions.png)
