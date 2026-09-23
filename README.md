@@ -12,7 +12,7 @@ The original analysis explored three areas:
 2. A performance comparison between Pandas and Polars
 3. Experimentation with Rust's ownership system
 
-The project has since been expanded to make the analysis more reproducible and reliable. The Python analysis workflow was refactored into reusable functions for data filtering, cleaning, preprocessing, and machine learning. Unit and integration tests were added using `pytest` and a GitHub Actions continuous integration (CI) workflow that automatically runs the test suite when changes are pushed to the repository.
+The project has been expanded to make the analysis more reproducible and reliable. The Python analysis workflow was refactored into reusable functions for data filtering, cleaning, preprocessing, and machine learning. Unit and integration tests were added using `pytest` and a GitHub Actions continuous integration (CI) workflow that automatically runs the test suite when changes are pushed to the repository.
 
 **_Note: The Yelp Open Dataset is not included in this repository due to its file size. Download the yelp_academic_dataset_business.json file here: https://business.yelp.com/data/resources/open-dataset/_**
 
