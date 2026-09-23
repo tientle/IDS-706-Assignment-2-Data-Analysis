@@ -114,53 +114,76 @@ I modified a Rust Jupyter notebook to demonstrate Rust's ownership system. I cre
 
 ![Rust Ownership Success](images/rust.png)
 
-## Testing and Continuous Integration
+## Reproducing the Analysis
 
-This project uses `pytest` to test the core data processing and machine
-learning workflow. The test suite includes unit tests for:
+To reproduce this analysis locally:
 
-- data filtering
-- cleaning
-- preprocessing
-- feature importance
+1. Clone this repository and navigate into the project directory.
 
-It also includes an end-to-end integration test that validates the workflow from raw Yelp-like data through
-model training, prediction, and evaluation.
+2. Create a virtual environment:
 
-Tests can be run locally with:
+   ```bash
+   python3 -m venv .venv
+   ```
+
+3. Activate the virtual environment:
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+4. Install the required dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. Download the [Yelp Open Dataset](https://business.yelp.com/data/resources/open-dataset/).
+
+   **The Yelp Open Dataset is not included in this repository due to its file size.**
+
+   Download and unpack the dataset, then place `yelp_academic_dataset_business.json` inside the project's `data/` directory:
+
+   ```text
+   data/
+   └── yelp_academic_dataset_business.json
+   ```
+
+6. Run the analysis:
+
+   ```bash
+   python yelp_data.py
+   ```
+
+   The script runs the full analysis workflow, including filtering the Yelp data to restaurants with at least 500 reviews, cleaning and preprocessing restaurant attributes, training the Random Forest regression model, evaluating its predictions, calculating feature importance, and generating the project visualizations.
+
+## Testing
+
+The project includes unit tests for the main data processing and preprocessing functions, along with an end-to-end integration test of the analysis workflow.
+
+Run all tests from the root of the repository with:
 
 ```bash
 python -m pytest testing/test_yelp_data.py -v
+```
 
-### Test Results
+The current test suite contains seven tests covering:
 
-All seven unit and integration tests pass successfully:
+- Restaurant filtering
+- String and business attribute cleaning
+- Removal of nested attributes
+- Feature preprocessing and encoding
+- Feature importance calculations
+- The end-to-end workflow from data processing through model training, prediction, and evaluation
+
+All seven tests currently pass successfully:
 
 ![Pytest results showing 7 passing tests](images/passed-tests.png)
 
-## Reproducing Analysis
+## Continuous Integration
 
-1. Clone repository
+GitHub Actions automatically runs the test suite whenever changes are pushed to the repository or submitted through a pull request. The workflow can also be run manually from the **Actions** tab on GitHub.
 
-2. Create a virtual environment
-   `python3 -m venv .venv`
-
-3. Activate the environment
-   ` source .venv/bin/activate`
-
-4. Install dependencies
-   `pip install -r requirements.txt`
-
-5. Download the Yelp Open Dataset and place it in the provided data directory
-
-**_The Yelp Open Dataset is not included in this repository due to its file size._**
-
-https://business.yelp.com/data/resources/open-dataset/
-
-Download the Yelp Open Dataset, unpack the .tar file, and place yelp_academic_dataset_business.json inside the data folder.
-
-6. Run the analysis
-   <br>
-   Run yelp_data.py
+```
 
 ```
