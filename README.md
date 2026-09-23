@@ -6,9 +6,13 @@
 
 This project explores data analysis, data engineering, and machine learning concepts using the Yelp Open Dataset.
 
-https://business.yelp.com/data/resources/open-dataset/
+The original analysis explored three areas:
 
-This assignment includes 1. an analysis between restaurant attributes and Yelp star ratings, 2. a performance between Pandas and Polars, and 3. experimentation with Rust's ownership system.
+1. The relationship between restaurant attributes and Yelp star ratings using a Random Forest regression model
+2. A performance comparison between Pandas and Polars
+3. Experimentation with Rust's ownership system
+
+The project has since been expanded to make the analysis more reproducible and reliable. The Python analysis workflow was refactored into reusable functions for data filtering, cleaning, preprocessing, and machine learning. Unit and integration tests were added using `pytest` and a GitHub Actions continuous integration (CI) workflow that automatically runs the test suite when changes are pushed to the repository.
 
 **_Note: The Yelp Open Dataset is not included in this repository due to its file size. Download the yelp_academic_dataset_business.json file here: https://business.yelp.com/data/resources/open-dataset/_**
 
@@ -16,11 +20,13 @@ This assignment includes 1. an analysis between restaurant attributes and Yelp s
 
 ### Project Question/Goal
 
-What restaurant characteristiscs are associated with higher Yelp star ratings?
+**What restaurant characteristics are associated with higher Yelp star ratings?**
 
-I analyzed restaurant attributes such as outdoor seating, delivery, alcohol offerings, bike parking and other characteristics to explore their relationships with a restaurant's Yelp star rating.
+Yelp ratings can have real-world implications for both restaurants and customers. Customers often use ratings to decide where to eat, while restaurant owners can use customer feedback and data to better understand how their business is perceived.
 
-I trained a Random Forest regression model to deterimine specifically which attributes were most useful in predicting restaurant ratings.
+I wanted to explore whether characteristics that restaurants can control or offer, such as outdoor seating, delivery, alcohol offerings, bike parking, and other amenities, are associated with differences in Yelp star ratings.
+
+I trained a Random Forest regression model to explore which restaurant attributes/characteristics were most useful for predicting ratings. These characteristics don't necessarily cause higher ratings, but help to identify patterns that could provide insight into the characteristics associated with customer ratings.
 
 ### Data
 
@@ -45,6 +51,8 @@ To clean and prepare the data, I:
 6. Converted 'RestaurantsPriceRange2' to a numeric variable
 
 Missing values were kept where appropriate because the absence of a characteristic in Yelp's data doesn't necessarily mean that the restaurant doesn't have that characteristic.
+
+As part of making the analysis more reproducible, the filtering and cleaning steps were refactored into reusable functions. These functions are also tested independently in the project's test suite.
 
 ### Machine Learning
 
@@ -159,7 +167,7 @@ To reproduce this analysis locally:
 
 ## Testing
 
-The project includes unit tests for the main data processing and preprocessing functions, along with an end-to-end integration test of the analysis workflow.
+To improve the reliability of the original analysis, I refactored key parts of the workflow into reusable functions and created a test suite using `pytest`.
 
 Run all tests from the root of the repository with:
 
