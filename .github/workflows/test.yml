@@ -35,3 +35,9 @@ jobs:
 
       - name: Run tests
         run: python -m pytest testing/test_yelp_data.py -v
+
+      - name: Build Docker image
+        run: docker build -t yelp-analysis .
+
+      - name: Test Docker container
+        run: docker run --rm yelp-analysis
