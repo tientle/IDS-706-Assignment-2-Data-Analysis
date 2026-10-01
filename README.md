@@ -14,7 +14,7 @@ The original analysis explored three areas:
 2. A performance comparison between Pandas and Polars
 3. Experimentation with Rust's ownership system
 
-The project has been expanded to make the analysis more reproducible and reliable. The Python analysis workflow was refactored into reusable functions for data filtering, cleaning, preprocessing, and machine learning. Unit and integration tests were added using `pytest` and a GitHub Actions continuous integration (CI) workflow that automatically runs the test suite when changes are pushed to the repository.
+The project has been expanded to make the analysis more reproducible and reliable. The Python analysis workflow was refactored into reusable functions for data filtering, cleaning, preprocessing, and machine learning. Unit and integration tests were added using `pytest`, code quality is checked using Black and flake8, and a GitHub Actions continuous integration (CI) workflow automatically validates the project across multiple Python versions. The project is also containerized with Docker to provide a reproducible environment for running the test suite.
 
 **_Note: The Yelp Open Dataset is not included in this repository due to its file size. Download the yelp_academic_dataset_business.json file here: https://business.yelp.com/data/resources/open-dataset/_**
 
@@ -167,6 +167,15 @@ To reproduce this analysis locally:
 
    The script runs the full analysis workflow, including filtering the Yelp data to restaurants with at least 500 reviews, cleaning and preprocessing restaurant attributes, training the Random Forest regression model, evaluating its predictions, calculating feature importance, and generating the project visualizations.
 
+### Reproducing the Test Environment with Docker
+
+Docker can be used to reproduce the environment required to run the automated test suite without creating a local Python virtual environment:
+
+````bash
+docker build -t yelp-analysis .
+docker run --rm yelp-analysis
+
+
 ## Testing
 
 To improve the reliability of the original analysis, I refactored key parts of the workflow into reusable functions and created a test suite using `pytest`.
@@ -175,7 +184,7 @@ Run all tests from the root of the repository with:
 
 ```bash
 python -m pytest testing/test_yelp_data.py -v
-```
+````
 
 The current test suite contains seven tests covering:
 
@@ -190,11 +199,74 @@ All seven tests currently pass successfully:
 
 ![Pytest results showing 7 passing tests](images/passed-tests.png)
 
-Matrix strategy:
-![Matrix strategy](images/matrix-strategy.png)
-
 ## Continuous Integration
 
-GitHub Actions automatically runs the test suite whenever changes are pushed to the repository or submitted through a pull request. The workflow can also be run manually from the **Actions** tab on GitHub.
+GitHub Actions automatically validates the project whenever changes are pushed to the repository or submitted through a pull request. The workflow can also be run manually from the **Actions** tab and is scheduled to run weekly.
+
+The CI workflow includes:
+
+- Testing across Python 3.12 and 3.13 using a matrix strategy
+- Code formatting validation with Black
+- Code quality checks with flake8
+- The full seven-test `pytest` suite
+- Building the Docker image
+- Running the test suite inside the Docker container
+
+### Python Version Matrix
+
+The workflow uses a matrix strategy to run the test suite independently with Python 3.12 and Python 3.13.
+
+Testing multiple Python versions helps identify compatibility issues that may not appear in a single development environment.
+
+![Matrix strategy](images/matrix-strategy.png)
+
+### Successful CI Workflow
+
+The workflow successfully runs the full validation pipeline across Python 3.12 and 3.13, including formatting, linting, automated tests, and Docker validation.
 
 ![Successful GitHub Actions workflow](images/github-actions.png)
+
+![Successful GitHub Actions workflow](images/testing.png)
+
+## Code Quality and Refactoring
+
+The original analysis was refactored to separate key data-processing and machine-learning operations into reusable functions. This made individual parts of the workflow easier to test and reduced the amount of analysis logic contained directly in the main script.
+
+Refactored functionality includes:
+
+- Filtering businesses by category and review count
+- Cleaning Yelp attribute strings and missing values
+- Removing nested attributes
+- Preprocessing categorical and numeric features
+- Mapping encoded features back to their original restaurant attributes
+- Aggregating feature importance scores
+
+Black is used to maintain consistent Python formatting, while flake8 checks the source code and tests for style and code-quality issues. Both checks are also included in the GitHub Actions workflow.
+
+### Refactoring Example
+
+The following commit diff shows the preprocessing logic being refactored into a reusable `preprocess_features()` function. Previously, feature preprocessing was performed directly in the main analysis workflow. The refactored version separates this logic into its own function and replaces the original preprocessing code with a function call, making it easier to test and reuse.
+
+![Refactoring commit diff](images/refactoring-diff.png)
+
+## Docker
+
+The project is containerized with Docker to provide a reproducible Python environment for running the test suite.
+
+Build the Docker image from the root of the repository:
+
+```bash
+docker build -t yelp-analysis .
+```
+
+Run the container:
+
+```bash
+docker run --rm yelp-analysis
+```
+
+The container automatically runs the project's `pytest` suite. A successful run should complete all seven tests.
+
+![Successful Docker build](images/docker-build.png)
+
+![Successful Docker test run](images/docker-tests.png)
