@@ -190,6 +190,9 @@ All seven tests currently pass successfully:
 
 ![Pytest results showing 7 passing tests](images/passed-tests.png)
 
+Matrix strategy:
+![Matrix strategy](images/matrix-strategy.png)
+
 ## Continuous Integration
 
 GitHub Actions automatically runs the test suite whenever changes are pushed to the repository or submitted through a pull request. The workflow can also be run manually from the **Actions** tab on GitHub.

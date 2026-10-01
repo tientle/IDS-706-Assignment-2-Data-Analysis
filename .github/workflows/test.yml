@@ -27,5 +27,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Check formatting with Black
+        run: black --check yelp_data.py testing/
+
+      - name: Lint with flake8
+        run: flake8 yelp_data.py testing/
+
       - name: Run tests
         run: python -m pytest testing/test_yelp_data.py -v
