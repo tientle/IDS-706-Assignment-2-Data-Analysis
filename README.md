@@ -171,10 +171,10 @@ To reproduce this analysis locally:
 
 Docker can be used to reproduce the environment required to run the automated test suite without creating a local Python virtual environment:
 
-````bash
+```bash
 docker build -t yelp-analysis .
 docker run --rm yelp-analysis
-
+```
 
 ## Testing
 
@@ -184,7 +184,7 @@ Run all tests from the root of the repository with:
 
 ```bash
 python -m pytest testing/test_yelp_data.py -v
-````
+```
 
 The current test suite contains seven tests covering:
 
