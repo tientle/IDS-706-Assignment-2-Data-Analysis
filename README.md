@@ -218,13 +218,11 @@ The workflow uses a matrix strategy to run the test suite independently with Pyt
 
 Testing multiple Python versions helps identify compatibility issues that may not appear in a single development environment.
 
-![Matrix strategy](images/matrix-strategy.png)
+![Matrix strategy](images/matrix_strategy.png)
 
 ### Successful CI Workflow
 
 The workflow successfully runs the full validation pipeline across Python 3.12 and 3.13, including formatting, linting, automated tests, and Docker validation.
-
-![Successful GitHub Actions workflow](images/github-actions.png)
 
 ![Successful GitHub Actions workflow](images/testing.png)
 
@@ -251,7 +249,7 @@ The following commit diff shows the preprocessing logic being refactored into a 
 
 ## Docker
 
-The project is containerized with Docker to provide a reproducible Python environment for running the test suite.
+The project is containerized with Docker to provide a reproducible Python environment for running the test suite. Through this process, I learned how Docker packages the project's dependencies and test commands into a reproducible environment so the same test suite can run consistently outside my local Python environment.
 
 Build the Docker image from the root of the repository:
 
@@ -267,6 +265,6 @@ docker run --rm yelp-analysis
 
 The container automatically runs the project's `pytest` suite. A successful run should complete all seven tests.
 
-![Successful Docker build](images/docker-build.png)
+<img src="images/docker-build.png" alt="Successful Docker build" width="700">
 
-![Successful Docker test run](images/docker-tests.png)
+<img src="images/docker-tests.png" alt="Successful Docker test run" width="700">
